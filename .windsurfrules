@@ -1,0 +1,54 @@
+# Java 21 & Spring Boot 3.x AI Coding Agent Rules
+
+You are an expert Java developer specializing in Spring Boot 3.x and Java 21.
+Adopt modern Java features aggressively to write concise, performant, and readable code.
+
+## 1. Java 21 Modern Features (STRICT)
+- **Records**: ALWAYS use `record` for DTOs, Value Objects, and event payloads instead of Lombok `@Data` classes.
+  ```java
+  public record UserResponse(String name, String email) {}
+  ```
+- **Virtual Threads**: Assume Virtual Threads are enabled (`spring.threads.virtual.enabled=true`).
+  - Prefer synchronous, blocking I/O style over complex Reactive (WebFlux) chains, as Virtual Threads handle concurrency efficiently.
+- **Pattern Matching & Switch**: Use enhanced `switch` expressions and pattern matching for `instanceof`.
+  ```java
+  return switch (obj) {
+      case Integer i -> "Int: " + i;
+      case String s -> "Str: " + s;
+      default -> "Unknown";
+  };
+  ```
+- **Sequenced Collections**: Use `getFirst()`, `getLast()`, `removeFirst()`, `removeLast()` instead of accessing via index `0` or `size() - 1`.
+- **Var**: Use `var` for local variables whenever the type is clear from the context.
+- **Text Blocks**: Use `"""` for JSON, SQL, and HTML strings.
+
+## 2. Spring Boot 3.x Best Practices
+- **Jakarta EE**: Use `jakarta.*` imports ONLY. (Never use `javax.*`).
+- **Dependency Injection**:
+  - Use Constructor Injection via `@RequiredArgsConstructor` (Lombok) for Services/Controllers.
+  - For `record` components, use the compact constructor or canonical constructor.
+- **HTTP Client**: Use `RestClient` (introduced in Spring 6.1) instead of `RestTemplate` or `WebClient` for synchronous calls.
+- **Observability**: Utilize Micrometer Tracing context if logging spans are needed.
+
+## 3. Code Style & Quality
+- **Immutability**: Prefer immutable collections (`List.of()`, `Map.of()`) and immutable objects.
+- **Optional**: Use `Optional` strictly for return types. Use `ifPresentOrElse` or `map` instead of `if (opt.isPresent())`.
+- **Stream API**: Use `toList()` directly (Java 16+) instead of `collect(Collectors.toList())`.
+
+## 4. Testing (JUnit 5 & Modern Tools)
+- **Framework**: JUnit 5 (`org.junit.jupiter.*`) + AssertJ.
+- **Mocking**: Mockito.
+- **Integration Tests**: Use **Testcontainers** for DB/Cache dependencies instead of H2 in-memory DBs to ensure environment parity.
+- **Test Structure**:
+  - Use `@DisplayName("...")` to describe test intent clearly.
+  - Follow `Given - When - Then` structure.
+
+## 5. Error Handling
+- Use `ProblemDetail` (RFC 7807) supported natively in Spring Boot 3 for error responses.
+- Avoid catching generic `Exception`. Catch specific exceptions.
+
+## 6. Prohibited (Legacy Patterns)
+- NO `java.util.Date` or `Calendar` -> Use `java.time.*` (LocalDate, Instant).
+- NO `StringBuffer` -> Use `StringBuilder`.
+- NO `System.out.println` -> Use `@Slf4j`.
+- NO `javax.*` imports.
