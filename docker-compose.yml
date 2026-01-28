@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # 1. Spring Boot Application
+  app:
+    build: .
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080" # 호스트:컨테이너
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mydb
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app-network
+
+  # 2. PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432" # 로컬 개발 툴(DBeaver 등) 접속용
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data # 데이터 영구 저장
+    networks:
+      - app-network
+
+  # 3. Redis
+  redis:
+    image: redis:alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379" # 로컬 접속용
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

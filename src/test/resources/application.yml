@@ -61,25 +61,6 @@ spring:
     virtual:
       enabled: true
 
-# SpringDoc OpenAPI Configuration
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-    enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
-    enabled: true
-    try-it-out-enabled: true
-    operations-sorter: method
-    tags-sorter: alpha
-    display-request-duration: true
-    show-extensions: true
-    show-common-extensions: true
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-
-
 # Logging Configuration
 logging:
   level:
@@ -92,3 +73,91 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file:
     name: logs/yieldflow-management.log
+
+# Management and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Bithumb API Configuration
+bithumb:
+  api:
+    base-url: https://api.bithumb.com
+    access-key: ${BITHUMB_ACCESS_KEY:}
+    secret-key: ${BITHUMB_SECRET_KEY:}
+    timeout: 30000
+    retry:
+      max-attempts: 3
+      delay: 1000
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/yieldflow_management_dev
+    username: yieldflow_dev
+    password: dev_password
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 1
+
+logging:
+  level:
+    com.yieldflow.management: DEBUG
+    org.springframework.cache: DEBUG
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  
+  datasource:
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  
+  data:
+    redis:
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 50
+          max-idle: 20
+
+logging:
+  level:
+    com.yieldflow.management: WARN
+    org.springframework.cache: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/yieldflow-management/application.log
+
+
