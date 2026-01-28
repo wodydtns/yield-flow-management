@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yield Flow | 회원가입 인증</title>
+    <style>
+        /* 기본 리셋 */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        table { border-collapse: collapse !important; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #0c1324; }
+
+        /* 모바일 반응형 */
+        @media screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .stack { display: block !important; width: 100% !important; max-width: 100% !important; }
+            .center { text-align: center !important; }
+            .mobile-px { padding-left: 20px !important; padding-right: 20px !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0c1324;">
+
+    <!-- 프리헤더 -->
+    <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+        Yield Flow 가입을 환영합니다. 이메일 인증으로 계정을 활성화하세요.
+    </div>
+
+    <center style="width: 100%; background-color: #0c1324;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0c1324;">
+            <tr>
+                <td align="center" style="padding: 32px 0;">
+
+                    <!-- 헤더 바 -->
+                    <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="640" style="margin: auto; max-width: 640px;">
+                        <tr>
+                            <td style="background: linear-gradient(90deg, #0f2f1c 0%, #10302f 50%, #0f2438 100%); border-radius: 14px; padding: 18px 24px; color: #ecf4ff; font-size: 18px; font-weight: 700;">
+                                <span style="color: #6df39f;">Yield flow system</span>
+                                <span style="float: right; font-size: 12px; font-weight: 500; color: #c8d3e0;">Welcome, ${userName}</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 메인 카드 -->
+                    <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="640" style="margin: 12px auto 0; max-width: 640px; background-color: #0f1830; border-radius: 14px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,0.35); border: 1px solid #1f2c4a;">
+                        <tr>
+                            <td style="padding: 32px 32px 12px 32px; color: #e9f1ff; font-size: 16px; line-height: 26px;">
+                                <p style="margin: 0 0 12px 0; font-size: 24px; font-weight: 800; color: #6df39f;">회원가입 인증 안내</p>
+                                <p style="margin: 0 0 14px 0; color: #c4d0e3;">안녕하세요, <strong style="color: #ffffff;">${userName}</strong>님.</p>
+                                <p style="margin: 0 0 14px 0; color: #c4d0e3;">계정을 활성화하려면 아래 인증하기 버튼을 눌러주세요. 보안 강화를 위해 24시간 이내에 인증을 완료해주세요.</p>
+                                <p style="margin: 0 0 12px 0; color: #8fa2c7; font-size: 13px;">요청하지 않은 메일이라면 이 메시지를 무시하셔도 됩니다.</p>
+                                <p style="margin: 0 0 12px 0; color: #8fa2c7; font-size: 13px;">이메일 인증 후 모든 거래 기능을 사용할 수 있습니다.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0 32px 28px 32px; text-align: center;">
+                               
+                                <a href="${actionUrl}" style="background-color:#13c37b; color:#0c1324; border-radius:8px; display:inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; font-weight:800; text-decoration:none; line-height:54px; width:240px; box-shadow: 0 10px 20px rgba(19,195,123,0.35);">
+                                    인증하기
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- 구분선 -->
+                        <tr>
+                            <td style="padding: 0 32px;">
+                                <div style="border-bottom: 1px solid #1f2c4a;"></div>
+                            </td>
+                        </tr>
+
+                        <!-- 하단 안내 -->
+                        <tr>
+                            <td style="padding: 24px 32px 32px 32px; text-align: center; font-size: 12px; line-height: 18px; color: #7e8bac;">
+                                <p style="margin: 0 0 6px 0;">본 메일은 발신 전용입니다. 문의는 고객센터를 이용해주세요.</p>
+                                <p style="margin: 0; color: #5f6f93;">&copy; 2026 Yield Flow. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

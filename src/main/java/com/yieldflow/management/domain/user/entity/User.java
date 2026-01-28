@@ -1,0 +1,67 @@
+package com.yieldflow.management.domain.user.entity;
+
+import java.util.ArrayList;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.CascadeType;
+import java.util.List;
+
+import com.yieldflow.management.global.enums.UserRole;
+import com.yieldflow.management.global.enums.UserStatus;
+
+@Entity
+@Table(name = "users")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    private String password; // Social 유저는 null 가능
+
+    @Column(nullable = false, length = 50)
+    private String nickname;
+
+    @Column(length = 500)
+    private String profileImage;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private UserStatus status;
+
+    // 양방향 매핑 (필요한 경우에만 추가, 보통 User에서 조회할 일이 많음)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SocialAccount> socialAccounts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ApiKey> apiKeys = new ArrayList<>();
+
+    @Builder
+    public User(String email, String password, String nickname, UserRole role, UserStatus status) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role != null ? role : UserRole.USER;
+        this.status = status != null ? status : UserStatus.ACTIVE;
+    }
+}

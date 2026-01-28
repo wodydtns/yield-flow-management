@@ -6,16 +6,22 @@ services:
     build: .
     container_name: spring-boot-app
     ports:
-      - "8080:8080" # 호스트:컨테이너
+      - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mydb
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=mypassword
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
+      # 메일 서버 설정 추가
+      - SPRING_MAIL_HOST=mailserver
+      - SPRING_MAIL_PORT=25
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=false
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=false
     depends_on:
       - postgres
       - redis
+      - mailserver
     networks:
       - app-network
 
@@ -24,13 +30,13 @@ services:
     image: postgres:15-alpine
     container_name: postgres-db
     ports:
-      - "5432:5432" # 로컬 개발 툴(DBeaver 등) 접속용
+      - "5432:5432"
     environment:
       POSTGRES_DB: mydb
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data # 데이터 영구 저장
+      - ./postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
 
@@ -39,7 +45,34 @@ services:
     image: redis:alpine
     container_name: redis-cache
     ports:
-      - "6379:6379" # 로컬 접속용
+      - "6379:6379"
+    networks:
+      - app-network
+
+  # 4. Mail Server (Postfix)
+  mailserver:
+    image: docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: mail
+    domainname: wodydtns.duckdns.org
+    ports:
+      - "25:25"       # SMTP
+      - "587:587"     # Submission
+      - "143:143"     # IMAP (메일 확인용)
+    environment:
+      - ENABLE_SPAMASSASSIN=0  # 개발용이라 리소스 절약을 위해 끔
+      - ENABLE_CLAMAV=0        # 개발용이라 리소스 절약을 위해 끔
+      - ENABLE_FAIL2BAN=0
+      - PERMIT_DOCKER=network  # 중요: 같은 도커 네트워크의 컨테이너는 인증 없이 발송 허용
+      - ONE_DIR=1
+    volumes:
+      - ./docker-data/dms/mail-data/:/var/mail/
+      - ./docker-data/dms/mail-state/:/var/mail-state/
+      - ./docker-data/dms/mail-logs/:/var/log/mail/
+      - ./docker-data/dms/config/:/tmp/docker-mailserver/
+      - /etc/localtime:/etc/localtime:ro
+    cap_add:
+      - NET_ADMIN
     networks:
       - app-network
 
