@@ -1,7 +1,7 @@
 spring:
   application:
     name: yieldflow-management
-  
+
   # PostgreSQL Database Configuration
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:yieldflow_management}
@@ -16,7 +16,7 @@ spring:
       minimum-idle: 5
       pool-name: YieldFlowHikariCP
       leak-detection-threshold: 60000
-  
+
   # JPA Configuration
   jpa:
     hibernate:
@@ -32,7 +32,7 @@ spring:
         order_inserts: true
         order_updates: true
     open-in-view: false
-  
+
   # Redis Configuration
   data:
     redis:
@@ -48,14 +48,14 @@ spring:
           min-idle: 5
           max-wait: 3000ms
         shutdown-timeout: 100ms
-  
+
   # Cache Configuration
   cache:
     type: redis
     redis:
-      time-to-live: 600000  # 10 minutes
+      time-to-live: 600000 # 10 minutes
       cache-null-values: false
-  
+
   # Virtual Threads (Java 21)
   threads:
     virtual:
@@ -78,7 +78,6 @@ springdoc:
   show-actuator: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-
 
 # Logging Configuration
 logging:

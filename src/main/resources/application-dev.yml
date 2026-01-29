@@ -1,0 +1,42 @@
+spring:
+  # H2 Database Configuration for Development
+  datasource:
+    # File-based H2 so DBeaver can connect; AUTO_SERVER allows multi-process access
+    url: jdbc:h2:~/yieldflow_management;MODE=PostgreSQL;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 2
+      pool-name: YieldFlowH2HikariCP
+
+  # JPA Configuration for H2
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        use_sql_comments: true
+
+  # H2 Console Configuration
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+
+# Logging Configuration for Development
+logging:
+  level:
+    com.yieldflow.management: DEBUG
+    org.springframework.cache: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

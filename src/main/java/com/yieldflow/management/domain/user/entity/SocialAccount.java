@@ -33,7 +33,7 @@ public class SocialAccount {
     private User user;
 
     @Column(nullable = false, length = 20)
-    private String provider; // Enum으로 관리 가능 (GOOGLE, KAKAO...)
+    private String provider;
 
     @Column(name = "provider_id", nullable = false)
     private String providerId;

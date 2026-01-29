@@ -15,7 +15,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.EnumType;
-import jakarta.persistence.CascadeType;
 import java.util.List;
 
 import com.yieldflow.management.global.enums.UserRole;
@@ -49,11 +48,13 @@ public class User {
     @Column(length = 20)
     private UserStatus status;
 
-    // 양방향 매핑 (필요한 경우에만 추가, 보통 User에서 조회할 일이 많음)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
+    private boolean isVerified;
+
+    @OneToMany(mappedBy = "user")
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<ApiKey> apiKeys = new ArrayList<>();
 
     @Builder
@@ -63,5 +64,10 @@ public class User {
         this.nickname = nickname;
         this.role = role != null ? role : UserRole.USER;
         this.status = status != null ? status : UserStatus.ACTIVE;
+        this.isVerified = false;
+    }
+
+    public void setVerified() {
+        this.isVerified = true;
     }
 }
