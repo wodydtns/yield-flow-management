@@ -13,9 +13,12 @@ import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.persistence.Id;
 import jakarta.persistence.EnumType;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.yieldflow.management.global.enums.UserRole;
 import com.yieldflow.management.global.enums.UserStatus;
@@ -30,9 +33,11 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Email
     private String email;
 
-    private String password; // Social 유저는 null 가능
+    @Column(nullable = false, length = 100)
+    private String password;
 
     @Column(nullable = false, length = 50)
     private String nickname;
@@ -51,9 +56,11 @@ public class User {
     @Column(nullable = false)
     private boolean isVerified;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ApiKey> apiKeys = new ArrayList<>();
 

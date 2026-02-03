@@ -6,6 +6,7 @@ import com.yieldflow.management.domain.user.dto.UserRequestDto;
 import com.yieldflow.management.domain.user.service.UserService;
 import com.yieldflow.management.global.response.ApiResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> createUser(@RequestBody UserRequestDto userRequestDto) {
+    public ApiResponse<Void> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         userService.createUser(userRequestDto);
         return ApiResponse.ok();
     }
