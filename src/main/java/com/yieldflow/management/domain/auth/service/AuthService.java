@@ -1,5 +1,10 @@
 package com.yieldflow.management.domain.auth.service;
 
+import java.util.List;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +43,18 @@ public class AuthService {
             throw new DomainException(DomainExceptionCode.INVALID_EMAIL_OR_PASSWORD);
         }
 
+        var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        var authentication = new UsernamePasswordAuthenticationToken(user.getId(), null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
         session.setAttribute("email", user.getEmail());
         session.setAttribute("role", user.getRole().name());
 
         session.setMaxInactiveInterval(30 * 60);
+
+        log.info("User logged in successfully: {}, role: {}", user.getEmail(), user.getRole());
 
         return new LoginResponseDto(
                 user.getId(),

@@ -94,6 +94,9 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+  health:
+    mail:
+      enabled: false
 
 # JWT Configuration
 jwt:
@@ -116,3 +119,8 @@ logging:
   file:
     name: logs/yieldflow-management.log
     path: logs
+
+bithumb:
+  api-url: https://api.bithumb.com
+  access-key: 6715e49426a13cfdcd660eac1c9d04071c68be1ae70949
+  secret-key: MGYwMmY5NWM5ZDU1NzU2ZGViOTEyMGFjMzZmN2I0MTYwOGFkMTI5MjBhMGExZjZlYjYxMGUyMGI0OWUzNA==
