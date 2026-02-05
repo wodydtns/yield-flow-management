@@ -39,3 +39,4 @@ docker-compose.yml
 docker-compose.yaml
 docker-data/
 postgres-data/
+logs/yieldflow-management.log

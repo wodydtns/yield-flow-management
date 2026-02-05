@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
-import com.yieldflow.management.global.external.bithumb.service.BithumbService;
+import com.yieldflow.management.global.external.bithumb.service.BithumbFeignService;
 import com.yieldflow.management.global.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final BithumbService bithumbService;
+    private final BithumbFeignService bithumbFeignService;
 
     @GetMapping("/chance")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<OrderChanceResponseDto> getOrderChance(
             @RequestParam(defaultValue = "KRW-BTC") String market) {
-        return ApiResponse.ok(bithumbService.getOrderChance(market));
+        // return ApiResponse.ok(bithumbService.getOrderChance(market));
+        return ApiResponse.ok(bithumbFeignService.getOrderChance(market));
     }
 }
