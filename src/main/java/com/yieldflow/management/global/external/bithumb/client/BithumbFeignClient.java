@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbAccountResponseDto;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
 
 @FeignClient(name = "bithumbClient", url = "${bithumb.api-url}", configuration = com.yieldflow.management.global.config.FeignConfig.class)
 public interface BithumbFeignClient {
@@ -29,4 +30,7 @@ public interface BithumbFeignClient {
 
     @GetMapping("/v1/market/all")
     List<BithumbMarketCodeResponseDto> getMarketCodes();
+
+    @GetMapping("v1/market/virtual_asset_warning")
+    List<BithumbVirtualAssetWarning> getVirtualAssetWarning();
 }

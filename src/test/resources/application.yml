@@ -92,8 +92,8 @@ management:
 bithumb:
   api:
     base-url: https://api.bithumb.com
-    access-key: ${BITHUMB_ACCESS_KEY:}
-    secret-key: ${BITHUMB_SECRET_KEY:}
+    access-key: test-access-key
+    secret-key: test-access-key
     timeout: 30000
     retry:
       max-attempts: 3

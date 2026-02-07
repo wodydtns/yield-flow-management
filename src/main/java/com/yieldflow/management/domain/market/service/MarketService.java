@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
 import com.yieldflow.management.global.external.bithumb.service.BithumbFeignService;
 
 @Service
@@ -23,5 +24,9 @@ public class MarketService {
                 .filter(market -> TARGET_CURRENCIES.stream()
                         .anyMatch(currency -> market.market().contains(currency)))
                 .toList();
+    }
+
+    public List<BithumbVirtualAssetWarning> getVirtualAssetWarning() {
+        return bithumbFeignService.getVirtualAssetWarning();
     }
 }

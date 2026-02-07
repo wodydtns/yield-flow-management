@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -27,6 +28,7 @@ import com.yieldflow.management.global.enums.UserStatus;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

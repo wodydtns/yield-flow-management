@@ -26,7 +26,7 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
@@ -38,6 +38,14 @@ spring:
         order_inserts: true
         order_updates: true
     open-in-view: false
+
+  # SQL Initialization
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:spring.sql
+      encoding: UTF-8
+      continue-on-error: true
 
   # Redis Configuration
   data:
@@ -62,10 +70,40 @@ spring:
       time-to-live: 600000 # 10 minutes
       cache-null-values: false
 
-  # Virtual Threads (Java 21)
-  threads:
-    virtual:
-      enabled: true
+  # RabbitMQ Configuration
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:yieldflow}
+    password: ${RABBITMQ_PASSWORD:password}
+    virtual-host: /
+    connection-timeout: 10000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000
+        max-attempts: 3
+        max-interval: 10000
+        multiplier: 2.0
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 2.0
+
+  # Batch Configuration
+  batch:
+    jdbc:
+      initialize-schema: never
+    job:
+      enabled: false
+    chunk:
+      size: 100
 
 # SpringDoc OpenAPI Configuration
 springdoc:
@@ -90,10 +128,18 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
   health:
     mail:
       enabled: false

@@ -8,6 +8,7 @@ import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
 import com.yieldflow.management.global.external.bithumb.client.BithumbFeignClient;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbAccountResponseDto;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +47,12 @@ public class BithumbFeignService {
         List<BithumbMarketCodeResponseDto> marketCodes = bithumbFeignClient.getMarketCodes();
         log.info("Fetched {} market codes", marketCodes.size());
         return marketCodes;
+    }
+
+    public List<BithumbVirtualAssetWarning> getVirtualAssetWarning() {
+        log.info("Fetching virtual asset warning using Feign");
+        List<BithumbVirtualAssetWarning> virtualAssetWarning = bithumbFeignClient.getVirtualAssetWarning();
+        log.info("Fetched {} virtual asset warning", virtualAssetWarning.size());
+        return virtualAssetWarning;
     }
 }
