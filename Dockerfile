@@ -8,6 +8,9 @@ WORKDIR /app
 COPY gradle/ gradle/
 COPY gradlew gradlew.bat build.gradle settings.gradle ./
 
+# [FIX] 실행 권한 부여 (이 줄이 추가되었습니다)
+RUN chmod +x gradlew
+
 # Download dependencies (this layer will be cached if dependencies don't change)
 RUN ./gradlew dependencies --no-daemon
 
