@@ -20,7 +20,7 @@ import jakarta.persistence.EnumType;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.yieldflow.management.global.entity.BaseEntity;
 import com.yieldflow.management.global.enums.UserRole;
 import com.yieldflow.management.global.enums.UserStatus;
 
@@ -29,7 +29,7 @@ import com.yieldflow.management.global.enums.UserStatus;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

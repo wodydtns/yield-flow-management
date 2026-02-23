@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     role          VARCHAR(20) DEFAULT 'USER',
     status        VARCHAR(20) DEFAULT 'ACTIVE',
     is_verified   BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at    TIMESTAMPTZ DEFAULT NOW(),
-    updated_at    TIMESTAMPTZ DEFAULT NOW()
+    created_at    TIMESTAMPTZ ,
+    updated_at    TIMESTAMPTZ 
 );
 
 -- Users 테이블 및 컬럼 주석
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS social_accounts (
     user_id       BIGINT NOT NULL,
     provider      VARCHAR(20) NOT NULL,
     provider_id   VARCHAR(255) NOT NULL,
-    connected_at  TIMESTAMPTZ DEFAULT NOW(),
+    connected_at  TIMESTAMPTZ ,
     CONSTRAINT fk_social_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT uk_social_provider UNIQUE (provider, provider_id)
 );
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS api_keys (
     is_active     BOOLEAN DEFAULT TRUE,
     last_used_at  TIMESTAMPTZ,
     expires_at    TIMESTAMPTZ,
-    created_at    TIMESTAMPTZ DEFAULT NOW(),
-    updated_at    TIMESTAMPTZ DEFAULT NOW(),
+    created_at    TIMESTAMPTZ ,
+    updated_at    TIMESTAMPTZ ,
     CONSTRAINT fk_apikey_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -68,11 +68,11 @@ COMMENT ON COLUMN api_keys.expires_at IS '키 만료일 (NULL이면 무제한)';
 CREATE TABLE IF NOT EXISTS MARKET_CODE (
     id BIGSERIAL PRIMARY KEY,
     market VARCHAR(20) NOT NULL,
-    korean_name VARCHAR(20) ,
-    english_name VARCHAR(20) ,
-    market_warning VARCHAR(20) ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    korean_name VARCHAR(50) ,
+    english_name VARCHAR(50) ,
+    market_warning VARCHAR(50) ,
+    created_at TIMESTAMPTZ ,
+    updated_at TIMESTAMPTZ 
 );
 
 COMMENT ON TABLE MARKET_CODE IS '마켓 코드';

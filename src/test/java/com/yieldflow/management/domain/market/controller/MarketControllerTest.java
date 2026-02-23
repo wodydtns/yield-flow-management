@@ -2,7 +2,7 @@ package com.yieldflow.management.domain.market.controller;
 
 import com.yieldflow.management.domain.market.service.MarketService;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
-import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarningDto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,8 +71,8 @@ class MarketControllerTest {
         void getVirtualAssetWarning_success() throws Exception {
                 // Given
                 var warnings = List.of(
-                                new BithumbVirtualAssetWarning("KRW-XRP", "CAUTION", "1", "2026-12-31"),
-                                new BithumbVirtualAssetWarning("KRW-DOGE", "CAUTION", "2", "2026-06-30"));
+                                new BithumbVirtualAssetWarningDto("KRW-XRP", "CAUTION", "1", "2026-12-31"),
+                                new BithumbVirtualAssetWarningDto("KRW-DOGE", "CAUTION", "2", "2026-06-30"));
                 given(marketService.getVirtualAssetWarning()).willReturn(warnings);
 
                 // When & Then

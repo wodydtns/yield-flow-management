@@ -1,11 +1,13 @@
 # 마켓 데이터(Market Data) 기능
 
 ## 개요
+
 빗썸 API를 통해 마켓 코드 및 가상자산 유의종목 정보를 조회하는 기능을 제공합니다.
 
 ## 아키텍처
 
 ### 레이어 구조
+
 ```
 Controller (MarketController)
     ↓
@@ -19,6 +21,7 @@ Feign Client (BithumbFeignClient)
 ## 주요 컴포넌트
 
 ### 1. Controller
+
 **파일**: `src/main/java/com/yieldflow/management/domain/market/controller/MarketController.java`
 
 ```java
@@ -32,15 +35,17 @@ public class MarketController {
     public ApiResponse<List<BithumbMarketCodeResponseDto>> getMarketCodes();
 
     @GetMapping("/virtual-asset-warning")
-    public ApiResponse<List<BithumbVirtualAssetWarning>> getVirtualAssetWarning();
+    public ApiResponse<List<BithumbVirtualAssetWarningDto>> getVirtualAssetWarning();
 }
 ```
 
 **엔드포인트**:
+
 - `GET /api/market/market-codes` - 마켓 코드 목록 조회
 - `GET /api/market/virtual-asset-warning` - 가상자산 유의종목 조회
 
 ### 2. Service
+
 **파일**: `src/main/java/com/yieldflow/management/domain/market/service/MarketService.java`
 
 ```java
@@ -48,7 +53,7 @@ public class MarketController {
 @RequiredArgsConstructor
 public class MarketService {
     private final BithumbFeignService bithumbFeignService;
-    
+
     private static final Set<String> TARGET_CURRENCIES = Set.of("BTC", "ETH", "USDT", "USDC");
 
     public List<BithumbMarketCodeResponseDto> getMarketCodes() {
@@ -58,16 +63,18 @@ public class MarketService {
                 .toList();
     }
 
-    public List<BithumbVirtualAssetWarning> getVirtualAssetWarning() {
+    public List<BithumbVirtualAssetWarningDto> getVirtualAssetWarning() {
         return bithumbFeignService.getVirtualAssetWarning();
     }
 }
 ```
 
 **필터링 로직**:
+
 - 주요 암호화폐만 필터링: BTC, ETH, USDT, USDC
 
 ### 3. External Service
+
 **파일**: `src/main/java/com/yieldflow/management/global/external/bithumb/service/BithumbFeignService.java`
 
 ```java
@@ -84,9 +91,9 @@ public class BithumbFeignService {
         return marketCodes;
     }
 
-    public List<BithumbVirtualAssetWarning> getVirtualAssetWarning() {
+    public List<BithumbVirtualAssetWarningDto> getVirtualAssetWarning() {
         log.info("Fetching virtual asset warning using Feign");
-        List<BithumbVirtualAssetWarning> virtualAssetWarning = bithumbFeignClient.getVirtualAssetWarning();
+        List<BithumbVirtualAssetWarningDto> virtualAssetWarning = bithumbFeignClient.getVirtualAssetWarning();
         log.info("Fetched {} virtual asset warning", virtualAssetWarning.size());
         return virtualAssetWarning;
     }
@@ -94,24 +101,26 @@ public class BithumbFeignService {
 ```
 
 ### 4. Feign Client
+
 **파일**: `src/main/java/com/yieldflow/management/global/external/bithumb/client/BithumbFeignClient.java`
 
 ```java
 @FeignClient(
-    name = "bithumbClient", 
-    url = "${bithumb.api-url}", 
-    configuration = FeignConfig.class
+    name = "bithumbClient",
+    url = "${bithumb.api-url}",
+    configuration = BithumbFeignConfig.class
 )
 public interface BithumbFeignClient {
     @GetMapping("/v1/market/all")
     List<BithumbMarketCodeResponseDto> getMarketCodes();
 
     @GetMapping("v1/market/virtual_asset_warning")
-    List<BithumbVirtualAssetWarning> getVirtualAssetWarning();
+    List<BithumbVirtualAssetWarningDto> getVirtualAssetWarning();
 }
 ```
 
 ### 5. DTOs (Records)
+
 **파일**: `src/main/java/com/yieldflow/management/global/external/bithumb/dto/`
 
 ```java
@@ -124,7 +133,7 @@ public record BithumbMarketCodeResponseDto(
 ) {}
 
 // 가상자산 유의종목
-public record BithumbVirtualAssetWarning(
+public record BithumbVirtualAssetWarningDto(
     String market,
     String warningType,
     String warningMessage
@@ -133,17 +142,19 @@ public record BithumbVirtualAssetWarning(
 
 ## Feign 설정
 
-### FeignConfig
-**파일**: `src/main/java/com/yieldflow/management/global/config/FeignConfig.java`
+### BithumbFeignConfig
+
+**파일**: `src/main/java/com/yieldflow/management/global/config/BithumbFeignConfig.java`
 
 **주요 설정**:
+
 - JWT 인증 헤더 추가
 - 타임아웃 설정
 - 재시도 정책
 
 ```java
 @Configuration
-public class FeignConfig {
+public class BithumbFeignConfig {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
@@ -156,6 +167,7 @@ public class FeignConfig {
 ```
 
 ### application.yml 설정
+
 ```yaml
 bithumb:
   api-url: https://api.bithumb.com
@@ -164,6 +176,7 @@ bithumb:
 ```
 
 ## Entity (MarketCode)
+
 **파일**: `src/main/java/com/yieldflow/management/domain/market/entity/MarketCode.java`
 
 ```java
@@ -199,6 +212,7 @@ public class MarketCode extends BaseEntity {
 ```
 
 ## Repository
+
 **파일**: `src/main/java/com/yieldflow/management/domain/market/repository/MarketCodeRepository.java`
 
 ```java
@@ -226,12 +240,14 @@ CREATE TABLE IF NOT EXISTS MARKET_CODE (
 ## 사용 예시
 
 ### 마켓 코드 조회
+
 ```bash
 curl -X GET http://localhost:8080/api/market/market-codes \
   -H "Cookie: SESSION=..."
 ```
 
 **응답 예시**:
+
 ```json
 {
   "data": [
@@ -252,6 +268,7 @@ curl -X GET http://localhost:8080/api/market/market-codes \
 ```
 
 ### 가상자산 유의종목 조회
+
 ```bash
 curl -X GET http://localhost:8080/api/market/virtual-asset-warning \
   -H "Cookie: SESSION=..."

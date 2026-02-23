@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * 마켓 코드 리포지토리
- */
 @Repository
 public interface MarketCodeRepository extends JpaRepository<MarketCode, Long> {
 

@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbAccountResponseDto;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
-import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbNoticeDto;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarningDto;
 
-@FeignClient(name = "bithumbClient", url = "${bithumb.api-url}", configuration = com.yieldflow.management.global.config.FeignConfig.class)
+@FeignClient(name = "bithumbClient", url = "${bithumb.api-url}", configuration = com.yieldflow.management.global.config.BithumbFeignConfig.class)
 public interface BithumbFeignClient {
 
     /**
@@ -32,5 +33,8 @@ public interface BithumbFeignClient {
     List<BithumbMarketCodeResponseDto> getMarketCodes();
 
     @GetMapping("v1/market/virtual_asset_warning")
-    List<BithumbVirtualAssetWarning> getVirtualAssetWarning();
+    List<BithumbVirtualAssetWarningDto> getVirtualAssetWarning();
+
+    @GetMapping("v1/notice")
+    List<BithumbNoticeDto> getNotices(@RequestParam("count") int count);
 }

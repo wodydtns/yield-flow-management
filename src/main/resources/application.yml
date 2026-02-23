@@ -170,3 +170,8 @@ bithumb:
   api-url: https://api.bithumb.com
   access-key: 6715e49426a13cfdcd660eac1c9d04071c68be1ae70949
   secret-key: MGYwMmY5NWM5ZDU1NzU2ZGViOTEyMGFjMzZmN2I0MTYwOGFkMTI5MjBhMGExZjZlYjYxMGUyMGI0OWUzNA==
+
+binance:
+  api-url: https://api.binance.com
+  api-key: 2UxJs9VpC5Lyzz0QTROBOiIZiQ59opAB6bP2xHYvh0WAda2zhNzQbCJgamWUip0f
+  api-secret: 9OFSKO2Pv2m9unCKRGCmvRRneg2D0F1SKQlHJNMKnewo2xqf2c1k3Ouv6VdkelaL

@@ -15,12 +15,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import feign.Logger;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import feign.Retryer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-public class FeignConfig {
+public class BithumbFeignConfig {
 
     @Value("${bithumb.access-key}")
     private String accessKey;
@@ -29,7 +28,7 @@ public class FeignConfig {
     private String secretKey;
 
     @Bean
-    public Logger.Level feignLoggerLevel() {
+    public Logger.Level bithumbFeignLoggerLevel() {
         return Logger.Level.FULL;
     }
 
@@ -85,13 +84,4 @@ public class FeignConfig {
         return "Bearer " + token;
     }
 
-    /**
-     * 재시도 설정 (Retryer)
-     * 기본값은 재시도 하지 않음(Retryer.NEVER_RETRY)
-     * 아래 예시는 1초 간격으로 시작해 최대 2초까지 늘어나며, 최대 3번 재시도
-     */
-    @Bean
-    public Retryer retryer() {
-        return new Retryer.Default(1000, 2000, 3);
-    }
 }

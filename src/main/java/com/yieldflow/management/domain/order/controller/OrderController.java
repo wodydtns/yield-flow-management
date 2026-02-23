@@ -1,5 +1,7 @@
 package com.yieldflow.management.domain.order.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +10,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
+import com.yieldflow.management.global.external.binance.dto.BinanceExchangeInfoResponseDto;
+import com.yieldflow.management.global.external.binance.dto.BinanceServerTimeDto;
+import com.yieldflow.management.global.external.binance.dto.BinanceTickerPriceDto;
+import com.yieldflow.management.global.external.binance.service.BinanceFeignService;
 import com.yieldflow.management.global.external.bithumb.service.BithumbFeignService;
 import com.yieldflow.management.global.response.ApiResponse;
 
@@ -19,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
     private final BithumbFeignService bithumbFeignService;
+    private final BinanceFeignService binanceFeignService;
 
     @GetMapping("/chance")
     @ResponseStatus(HttpStatus.OK)
@@ -26,5 +33,23 @@ public class OrderController {
             @RequestParam(defaultValue = "KRW-BTC") String market) {
         // return ApiResponse.ok(bithumbService.getOrderChance(market));
         return ApiResponse.ok(bithumbFeignService.getOrderChance(market));
+    }
+
+    @GetMapping("/binance/server-time")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<BinanceServerTimeDto> getBinanceServerTime() {
+        return ApiResponse.ok(binanceFeignService.getServerTime());
+    }
+
+    @GetMapping("/binance/ticker-prices")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<List<BinanceTickerPriceDto>> getBinanceTickerPrices() {
+        return ApiResponse.ok(binanceFeignService.getTickerPrices());
+    }
+
+    @GetMapping("/binance/exchange-info")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<BinanceExchangeInfoResponseDto> getBinanceExchangeInfo() {
+        return ApiResponse.ok(binanceFeignService.getExchangeInfo());
     }
 }

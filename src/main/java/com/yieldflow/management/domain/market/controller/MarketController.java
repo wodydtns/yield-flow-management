@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yieldflow.management.domain.market.service.MarketService;
 import com.yieldflow.management.global.external.bithumb.dto.BithumbMarketCodeResponseDto;
-import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarning;
+import com.yieldflow.management.global.external.bithumb.dto.BithumbVirtualAssetWarningDto;
 import com.yieldflow.management.global.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class MarketController {
     }
 
     @GetMapping("/virtual-asset-warning")
-    public ApiResponse<List<BithumbVirtualAssetWarning>> getVirtualAssetWarning() {
+    public ApiResponse<List<BithumbVirtualAssetWarningDto>> getVirtualAssetWarning() {
         return ApiResponse.ok(marketService.getVirtualAssetWarning());
     }
 }

@@ -1,7 +1,5 @@
 package com.yieldflow.management.domain.market.entity;
 
-import java.time.LocalDateTime;
-
 import com.yieldflow.management.global.entity.BaseEntity;
 
 import jakarta.persistence.*;
@@ -30,12 +28,6 @@ public class MarketCode extends BaseEntity {
 
     @Column(name = "market_warning", nullable = false, length = 20)
     private String marketWarning;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     /**
      * 마켓 정보 업데이트
