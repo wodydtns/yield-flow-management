@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # 1. Spring Boot App (운영 설정)
+  app:
+    container_name: yield-flow-app
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/yieldflow_management
+      - SPRING_DATASOURCE_USERNAME=yieldflow
+      - SPRING_DATASOURCE_PASSWORD=flsdl@qkqn7
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: yieldflow_management
+      POSTGRES_USER: yieldflow
+      POSTGRES_PASSWORD: flsdl@qkqn7
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./src/main/resources/spring.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U yieldflow -d yieldflow_management" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app-network
+
+volumes:
+  # 운영 데이터 영구 보존을 위한 볼륨
+  pg_prod_data:
+
+
+networks:
+  app-network:
+    driver: bridge

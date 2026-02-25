@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yieldflow.management.domain.order.dto.OrderChanceResponseDto;
 import com.yieldflow.management.global.external.binance.dto.BinanceExchangeInfoResponseDto;
+import com.yieldflow.management.global.external.binance.dto.BinanceOrderResponseDto;
 import com.yieldflow.management.global.external.binance.dto.BinanceServerTimeDto;
 import com.yieldflow.management.global.external.binance.dto.BinanceTickerPriceDto;
 import com.yieldflow.management.global.external.binance.service.BinanceFeignService;
@@ -51,5 +53,23 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<BinanceExchangeInfoResponseDto> getBinanceExchangeInfo() {
         return ApiResponse.ok(binanceFeignService.getExchangeInfo());
+    }
+
+    @PostMapping("/binance/order/buy")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<BinanceOrderResponseDto> placeBinanceMarketBuy(
+            @RequestParam String symbol,
+            @RequestParam String quantity,
+            @RequestParam(required = false) Long recvWindow) {
+        return ApiResponse.ok(binanceFeignService.placeMarketBuyOrder(symbol, quantity, recvWindow));
+    }
+
+    @PostMapping("/binance/order/sell")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<BinanceOrderResponseDto> placeBinanceMarketSell(
+            @RequestParam String symbol,
+            @RequestParam String quantity,
+            @RequestParam(required = false) Long recvWindow) {
+        return ApiResponse.ok(binanceFeignService.placeMarketSellOrder(symbol, quantity, recvWindow));
     }
 }
