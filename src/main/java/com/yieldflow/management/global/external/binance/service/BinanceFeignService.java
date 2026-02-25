@@ -1,7 +1,10 @@
 package com.yieldflow.management.global.external.binance.service;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.yieldflow.management.global.external.binance.client.BinanceFeignClient;
@@ -14,12 +17,21 @@ import com.yieldflow.management.global.external.binance.dto.account.BinanceAccou
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BinanceFeignService {
 
     private final BinanceFeignClient binanceFeignClient;
+
+    @Value("${binance.api-key}")
+    private String apiKey;
+
+    @Value("${binance.api-secret}")
+    private String apiSecret;
 
     public BinanceServerTimeDto getServerTime() {
         log.info("Fetching Binance server time via Feign");

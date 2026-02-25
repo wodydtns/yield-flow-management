@@ -3,6 +3,7 @@ package com.yieldflow.management.global.external.binance.client;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -43,4 +44,5 @@ public interface BinanceFeignClient {
                         @RequestParam("price") String price,
                         @RequestParam("timestamp") long timestamp,
                         @RequestParam("signature") String signature);
+
 }
