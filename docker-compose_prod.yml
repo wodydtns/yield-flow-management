@@ -28,7 +28,7 @@ services:
       retries: 10
       start_period: 10s
     networks:
-      - app-network
+      - devops-network
 
 volumes:
   # 운영 데이터 영구 보존을 위한 볼륨
@@ -36,5 +36,5 @@ volumes:
 
 
 networks:
-  app-network:
+  devops-network:
     driver: bridge
