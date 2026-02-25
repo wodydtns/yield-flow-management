@@ -9,10 +9,10 @@ import feign.Logger;
 @Configuration
 public class BinanceFeignConfig {
 
-    @Value("${binance.api-key}")
+    @Value("${binance-test.api-key}")
     private String accessKey;
 
-    @Value("${binance.api-secret}")
+    @Value("${binance-test.api-secret}")
     private String secretKey;
 
     @Bean

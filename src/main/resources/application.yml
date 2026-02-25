@@ -175,3 +175,7 @@ binance:
   api-url: https://api.binance.com
   api-key: 2UxJs9VpC5Lyzz0QTROBOiIZiQ59opAB6bP2xHYvh0WAda2zhNzQbCJgamWUip0f
   api-secret: 9OFSKO2Pv2m9unCKRGCmvRRneg2D0F1SKQlHJNMKnewo2xqf2c1k3Ouv6VdkelaL
+binance-test:
+  api-url: https://testnet.binance.vision
+  api-key: RF3zIv36NdFGenPDmd0KKK7AKR7cTq3s1QyvVOEf0vtHczOUX1RPqHXm91vBqsXp
+  api-secret: kRX9gdiLjMLnADrmxBCtThhzhNVgPWX7yr5f7v1jRaV0cxEyEmtVBpbqZGnzLRaR
