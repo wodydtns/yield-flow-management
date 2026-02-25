@@ -146,8 +146,4 @@ services:
       prometheus:
         condition: service_started
     networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - devops-network
