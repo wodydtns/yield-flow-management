@@ -21,6 +21,8 @@ services:
       # --- Redis 설정 (외부망) ---
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
+
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
     depends_on:
       postgres:
         condition: service_healthy
