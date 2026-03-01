@@ -13,12 +13,10 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       
       # --- RabbitMQ 설정 (외부망 기존 컨테이너) ---
-      # 중요: 기존에 실행 중인 컨테이너 이름이 'rabbitmq'라고 가정합니다.
-      # 만약 기존 컨테이너 이름이 다르다면 그 이름을 적어야 합니다.
       - SPRING_RABBITMQ_HOST=rabbitmq 
       - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_RABBITMQ_USERNAME=wodydtns
+      - SPRING_RABBITMQ_PASSWORD=flsdl@qkqn7
       
       # --- Redis 설정 (외부망) ---
       - SPRING_REDIS_HOST=redis
@@ -26,7 +24,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      # rabbitmq는 외부에서 이미 돌고 있으므로 여기서 기다리지 않습니다.
     networks:
       - devops-network  # RabbitMQ, Redis와 통신
       - app-network     # PostgreSQL과 통신
@@ -51,15 +48,6 @@ services:
       start_period: 10s
     networks:
       - app-network
-
-  # 3. Redis (devops-network 사용)
-  # (만약 Redis도 "기존에 있는 걸 사용"하는 거라면 이 섹션도 지워야 합니다.
-  #  하지만 "Redis는 devops-network를 사용하고"라고 하셔서 일단 남겨둡니다.)
-  redis:
-    image: redis:alpine
-    container_name: redis-cache
-    networks:
-      - devops-network
 
 volumes:
   pg_prod_data:
