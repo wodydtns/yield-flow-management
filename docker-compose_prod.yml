@@ -19,8 +19,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=flsdl@qkqn7
       
       # --- Redis 설정 (외부망) ---
-      - SPRING_REDIS_HOST=redis
-      - SPRING_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
     depends_on:
       postgres:
         condition: service_healthy
