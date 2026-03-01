@@ -1,7 +1,11 @@
 package com.yieldflow.management.global.config;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -16,7 +20,7 @@ public class RabbitConfig {
 
     public static final String ORDER_QUEUE = "order.queue";
     public static final String TRADE_QUEUE = "trade.queue";
-    public static final String NOTIFICATION_QUEUE = "notification.queue";
+    public static final String TRADING_SIGNALS_EXCHANGE = "trading_signals";
 
     @Bean
     public Queue orderQueue() {
@@ -29,8 +33,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue notificationQueue() {
-        return new Queue(NOTIFICATION_QUEUE, true);
+    public TopicExchange tradingSignalsExchange() {
+        return new TopicExchange(TRADING_SIGNALS_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public Binding orderQueueBinding(Queue orderQueue, TopicExchange tradingSignalsExchange) {
+        return BindingBuilder.bind(orderQueue).to(tradingSignalsExchange).with("signal.*");
     }
 
     @Bean
@@ -50,5 +59,15 @@ public class RabbitConfig {
             }
         });
         return template;
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
+            ConnectionFactory connectionFactory,
+            MessageConverter messageConverter) {
+        var factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(messageConverter);
+        return factory;
     }
 }

@@ -28,6 +28,8 @@ services:
         condition: service_started
       mailserver:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -45,7 +47,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       - ./src/main/resources/spring.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U yieldflow -d yieldflow_management" ]
+      test: ["CMD-SHELL", "pg_isready -U yieldflow -d yieldflow_management"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -57,8 +59,7 @@ services:
   redis:
     image: redis:alpine
     container_name: redis-cache
-    ports:
-      - "6379:6379"
+    # 내부 네트워크에서만 접근 (호스트 포트 바인딩 제거)
     networks:
       - app-network
 
@@ -120,9 +121,9 @@ services:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./docker-data/prometheus:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=15d'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
     depends_on:
       app:
         condition: service_started
@@ -146,4 +147,8 @@ services:
       prometheus:
         condition: service_started
     networks:
-      - devops-network
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

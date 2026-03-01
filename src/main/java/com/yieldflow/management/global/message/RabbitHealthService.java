@@ -45,11 +45,9 @@ public class RabbitHealthService {
             RabbitAdmin admin = new RabbitAdmin(connectionFactory);
             Queue orderQueue = new Queue(RabbitConfig.ORDER_QUEUE, true);
             Queue tradeQueue = new Queue(RabbitConfig.TRADE_QUEUE, true);
-            Queue notificationQueue = new Queue(RabbitConfig.NOTIFICATION_QUEUE, true);
 
             admin.declareQueue(orderQueue);
             admin.declareQueue(tradeQueue);
-            admin.declareQueue(notificationQueue);
 
             // 3. 테스트 메시지 발행 (FastAPI와 통신 테스트용)
             var testMessage = new ConnectionTestMessage(

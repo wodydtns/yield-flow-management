@@ -62,4 +62,35 @@ public class BinanceFeignService {
         return binanceFeignClient.placeOrder(apiKey, symbol, side, "LIMIT", timeInForce, quantity, price, timestamp,
                 signature);
     }
+
+    public BinanceOrderResponseDto placeLimitOrderSigned(String symbol, String side, String timeInForce,
+            String quantity,
+            String price) {
+        try {
+            long timestamp = Instant.now().toEpochMilli();
+            var query = String.format(
+                    "symbol=%s&side=%s&type=LIMIT&timeInForce=%s&quantity=%s&price=%s&timestamp=%d",
+                    symbol, side, timeInForce, quantity, price, timestamp);
+            var signature = sign(query, apiSecret);
+
+            log.info("Placing Binance limit order (signed) symbol={} side={} qty={} price={}", symbol, side, quantity,
+                    price);
+            return placeLimitOrder(apiKey, symbol, side, timeInForce, quantity, price, timestamp, signature);
+        } catch (Exception e) {
+            log.error("Failed to place signed Binance order", e);
+            throw new RuntimeException("Failed to place signed Binance order", e);
+        }
+    }
+
+    private String sign(String data, String secret) throws Exception {
+        Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        sha256Hmac.init(secretKey);
+        byte[] hash = sha256Hmac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        StringBuilder result = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
 }
