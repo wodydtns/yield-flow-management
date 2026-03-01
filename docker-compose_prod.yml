@@ -23,6 +23,11 @@ services:
       - SPRING_DATA_REDIS_PORT=6379
 
       - SERVER_FORWARD_HEADERS_STRATEGY=framework
+       # [해결책] Swagger가 설정 파일을 찾을 때 사용할 전체 경로 지정
+      - SPRINGDOC_SWAGGER_UI_CONFIG_URL=/yield-management/v3/api-docs/swagger-config
+      
+      # [선택] "Try it out" 실행 시 API 요청 경로 보정
+      - SPRINGDOC_SWAGGER_UI_URL=/yield-management/swagger-ui.html
     depends_on:
       postgres:
         condition: service_healthy
