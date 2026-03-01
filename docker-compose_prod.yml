@@ -7,28 +7,29 @@ services:
     build: .
     restart: always
     environment:
-      # DB 설정
+      # --- DB 설정 (내부망 postgres 컨테이너) ---
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/yieldflow_management
       - SPRING_DATASOURCE_USERNAME=yieldflow
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       
-      # [수정 1] RabbitMQ 설정 추가 (서비스명 'rabbitmq'를 호스트로 지정)
-      - SPRING_RABBITMQ_HOST=rabbitmq
+      # --- RabbitMQ 설정 (외부망 기존 컨테이너) ---
+      # 중요: 기존에 실행 중인 컨테이너 이름이 'rabbitmq'라고 가정합니다.
+      # 만약 기존 컨테이너 이름이 다르다면 그 이름을 적어야 합니다.
+      - SPRING_RABBITMQ_HOST=rabbitmq 
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
       
-      # Redis 설정
+      # --- Redis 설정 (외부망) ---
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
     depends_on:
       postgres:
         condition: service_healthy
-      rabbitmq:
-        condition: service_started
+      # rabbitmq는 외부에서 이미 돌고 있으므로 여기서 기다리지 않습니다.
     networks:
-      - devops-network
-      - app-network
+      - devops-network  # RabbitMQ, Redis와 통신
+      - app-network     # PostgreSQL과 통신
 
   # 2. PostgreSQL Database (app-network 전용)
   postgres:
@@ -51,27 +52,14 @@ services:
     networks:
       - app-network
 
-  # 3. Redis (devops-network 전용)
+  # 3. Redis (devops-network 사용)
+  # (만약 Redis도 "기존에 있는 걸 사용"하는 거라면 이 섹션도 지워야 합니다.
+  #  하지만 "Redis는 devops-network를 사용하고"라고 하셔서 일단 남겨둡니다.)
   redis:
     image: redis:alpine
     container_name: redis-cache
     networks:
       - devops-network
-
-  # [수정 2] RabbitMQ 서비스 추가
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      # 관리자 UI 접속용 (필요 없다면 주석 처리)
-      - "15672:15672"
-      # 5672 포트는 내부 네트워크로만 통신하므로 노출 불필요
-    networks:
-      - app-network  # 앱과 통신해야 하므로 app-network에 배치
 
 volumes:
   pg_prod_data:
